@@ -67,7 +67,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @SpringBootTest(classes = {QEatsApplication.class})
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 @AutoConfigureMockMvc
-@DirtiesContext
+ 
 @ActiveProfiles("test")
 public class RestaurantControllerTest {
 

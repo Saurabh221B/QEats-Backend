@@ -14,8 +14,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
-
 @SpringBootApplication
+//@SpringBootApplication(scanBasePackages="com.crio.qeats")
 @Log4j2
 public class QEatsApplication {
 
