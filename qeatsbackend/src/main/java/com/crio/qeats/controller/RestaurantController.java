@@ -6,10 +6,13 @@
 
 package com.crio.qeats.controller;
 
+import com.crio.qeats.dto.Restaurant;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.services.RestaurantService;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,17 +61,35 @@ public class RestaurantController {
     //   //CHECKSTYLE:ON
 
     // return ResponseEntity.ok().body(getRestaurantsResponse);
-    if (getRestaurantsRequest.getLatitude() != null && getRestaurantsRequest.getLongitude() != null
-    && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90
-    && getRestaurantsRequest.getLongitude() >= -180 && getRestaurantsRequest.getLongitude() <= 180) {
+  
+    
+    
+     if (getRestaurantsRequest.getLatitude() != null && getRestaurantsRequest.getLongitude() != null
+     && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90
+     && getRestaurantsRequest.getLongitude() >= -180 && getRestaurantsRequest.getLongitude() <= 180) {
+
        getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+
+       if(getRestaurantsResponse!=null && !getRestaurantsResponse.getRestaurants().isEmpty()){
+        List<Restaurant>restaurants=getRestaurantsResponse.getRestaurants();
+        for(Restaurant restaurant:restaurants){
+          restaurant.setName(restaurant.getName().replaceAll("[^A-Za-z0-9\\s]", ""));
+        }
+        getRestaurantsResponse.setRestaurants(restaurants);
+
+       }
+   
        log.info("getRestaurants returned {}", getRestaurantsResponse);
         return ResponseEntity.ok().body(getRestaurantsResponse);
-    } else {
-        return ResponseEntity.badRequest().body(null);
-    }
 
+     } else {
+        return ResponseEntity.badRequest().body(null);
+     }
   }
+  
+
+  
+
 
   // TIP(MODULE_MENUAPI): Model Implementation for getting menu given a restaurantId.
   // Get the Menu for the given restaurantId

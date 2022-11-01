@@ -2,8 +2,11 @@
 // CRIO_SOLUTION_AND_STUB_END_MODULE_SERIALIZATION
 #!/bin/bash
 
-lat=12.9
-lng=77.8
+#lat=12.9
+#lng=77.8
+
+lat=20.8096375932449
+lng= 77.8
 
 source coordinates.txt
 
