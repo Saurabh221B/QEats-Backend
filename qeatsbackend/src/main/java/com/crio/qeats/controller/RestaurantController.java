@@ -70,14 +70,19 @@ public class RestaurantController {
 
        getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
 
-       if(getRestaurantsResponse!=null && !getRestaurantsResponse.getRestaurants().isEmpty()){
-        List<Restaurant>restaurants=getRestaurantsResponse.getRestaurants();
-        for(Restaurant restaurant:restaurants){
-          restaurant.setName(restaurant.getName().replaceAll("[^A-Za-z0-9\\s]", ""));
-        }
-        getRestaurantsResponse.setRestaurants(restaurants);
+      //  if(getRestaurantsResponse!=null && !getRestaurantsResponse.getRestaurants().isEmpty()){
+      //   List<Restaurant>restaurants=getRestaurantsResponse.getRestaurants();
+      //   for(Restaurant restaurant:restaurants){
+      //     restaurant.setName(restaurant.getName().replaceAll("[^A-Za-z0-9\\s]", ""));
+      //   }
+      //   getRestaurantsResponse.setRestaurants(restaurants);
 
-       }
+      //  }
+      if (getRestaurantsResponse != null && !getRestaurantsResponse.getRestaurants().isEmpty()) {
+        getRestaurantsResponse.getRestaurants().forEach(restaurant -> {
+          restaurant.setName(restaurant.getName().replace("é", "?"));
+        });
+      }
    
        log.info("getRestaurants returned {}", getRestaurantsResponse);
         return ResponseEntity.ok().body(getRestaurantsResponse);
