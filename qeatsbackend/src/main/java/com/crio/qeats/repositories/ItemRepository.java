@@ -8,6 +8,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 public interface ItemRepository extends MongoRepository<ItemEntity, String> {
+    List<ItemEntity> findByNameRegexIgnoreCase(String searchString);
+    List<ItemEntity> findBy(String searchString);
+    List<ItemEntity> findByAttributes(String searchString);
 
 }
 

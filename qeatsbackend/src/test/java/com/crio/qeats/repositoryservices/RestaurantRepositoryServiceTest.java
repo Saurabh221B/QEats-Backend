@@ -52,6 +52,7 @@ public class RestaurantRepositoryServiceTest {
 
   private static final String FIXTURES = "fixtures/exchanges";
   List<RestaurantEntity> allRestaurants = new ArrayList<>();
+  List<RestaurantEntity> allRestaurantsSearchedByAttributes = new ArrayList<>();
   @Autowired
   private RestaurantRepositoryService restaurantRepositoryService;
   @Autowired
@@ -82,6 +83,7 @@ public class RestaurantRepositoryServiceTest {
   @BeforeEach
   void setup() throws IOException {
     allRestaurants = listOfRestaurants();
+    allRestaurantsSearchedByAttributes=listOfRestaurantsSearchedByAttributees();
     for (RestaurantEntity restaurantEntity : allRestaurants) {
       mongoTemplate.save(restaurantEntity, "restaurants");
     }
@@ -146,15 +148,72 @@ public class RestaurantRepositoryServiceTest {
     assertEquals(0, allRestaurantsCloseBy.size());
   }
 
+  @Test
+  void findRestaurantsByName(@Autowired MongoTemplate mongoTemplate) { 
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
+
+    // doReturn(Optional.of(allRestaurants))
+    //     .when(restaurantRepository).findByNameRegexIgnoreCase(any());
+    // doReturn(allRestaurants)
+    //      .when(restaurantRepository).findByNameRegexIgnoreCase(any());
+
+         doReturn(allRestaurants)
+         .when(restaurantRepository).findByNameIgnoreCaseContainingOrderByNameAsc(any());
+    String searchFor = "A2B";
+    List<Restaurant> foundRestaurantsList = restaurantRepositoryService
+        .findRestaurantsByName(20.8, 30.1, searchFor,
+            LocalTime.of(20, 0), 5.0);
+
+    // System.out.println(foundRestaurantsList.get(0).getName());
+    // System.out.println(foundRestaurantsList.get(1).getName());
+    // System.out.println(foundRestaurantsList.get(2).getName());
+    assertEquals(2, foundRestaurantsList.size());
+  }
+
+  @Test
+  void foundRestaurantsExactMatchesFirst(@Autowired MongoTemplate mongoTemplate) {
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
+
+    // doReturn(Optional.of(allRestaurants))
+    //     .when(restaurantRepository).findRestaurantsByNameExact(any());
+    // doReturn(allRestaurants)
+    //      .when(restaurantRepository).findByNameRegexIgnoreCase(any()); 
+         doReturn(allRestaurants)
+         .when(restaurantRepository).findByNameIgnoreCaseContainingOrderByNameAsc(any());
+    String searchFor = "A2B";
+    List<Restaurant> foundRestaurantsList = restaurantRepositoryService
+        .findRestaurantsByName(20.8, 30.1, searchFor,
+            LocalTime.of(20, 0), 5.0);
+
+    assertEquals(2, foundRestaurantsList.size());
+    assertEquals("A2B", foundRestaurantsList.get(0).getName());
+    assertEquals("A2B Adyar Ananda Bhavan", foundRestaurantsList.get(1).getName());
+  }
 
 
-
-
+  @Test
   void searchedAttributesIsSubsetOfRetrievedRestaurantAttributes() {
+
+    String searchFor = "Tamil";
+    doReturn(allRestaurants)
+    .when(restaurantRepository).findByAttributesIgnoreCase(any());
+
+
+    List<Restaurant> foundRestaurantsList = restaurantRepositoryService
+        .findRestaurantsByAttributes(20.8, 30.1, searchFor,
+            LocalTime.of(20, 0), 5.0);
+
+
+    assertEquals(2, foundRestaurantsList.size());
+    assertEquals("Tamil", foundRestaurantsList.get(0).getAttributes().get(0));        
+    
+
     // TODO
   }
 
-  void searchedAttributesIsCaseInsensitive() {
+  void searchedAttributesIsCaseInsensitive() { 
     // TODO
   }
 
@@ -162,7 +221,14 @@ public class RestaurantRepositoryServiceTest {
     String fixture =
         FixtureHelpers.fixture(FIXTURES + "/initial_data_set_restaurants.json");
 
-    return objectMapper.readValue(fixture, new TypeReference<List<RestaurantEntity>>() {
+    return objectMapper.readValue(fixture, new TypeReference<List<RestaurantEntity>>() { 
+    });
+  }
+  private List<RestaurantEntity> listOfRestaurantsSearchedByAttributees() throws IOException {
+    String fixture =
+        FixtureHelpers.fixture(FIXTURES + "/list_restaurants_searchedby_attributes.json");
+
+    return objectMapper.readValue(fixture, new TypeReference<List<RestaurantEntity>>() { 
     });
   }
 }

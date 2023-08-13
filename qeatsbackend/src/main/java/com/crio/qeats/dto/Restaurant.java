@@ -15,6 +15,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,6 +40,7 @@ import lombok.Setter;
 @Getter 
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EqualsAndHashCode(of = "restaurantId")
 public class Restaurant {
     @JsonProperty("restaurantId")
     private String restaurantId;

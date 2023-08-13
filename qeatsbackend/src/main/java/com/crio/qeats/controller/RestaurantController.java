@@ -49,7 +49,7 @@ public class RestaurantController {
 
   @GetMapping(RESTAURANTS_API)
   public ResponseEntity<GetRestaurantsResponse> getRestaurants(
-       GetRestaurantsRequest getRestaurantsRequest) {
+       @Valid GetRestaurantsRequest getRestaurantsRequest) {
 
     log.info("getRestaurants called with {}", getRestaurantsRequest);
     GetRestaurantsResponse getRestaurantsResponse;
@@ -67,8 +67,14 @@ public class RestaurantController {
      if (getRestaurantsRequest.getLatitude() != null && getRestaurantsRequest.getLongitude() != null
      && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90
      && getRestaurantsRequest.getLongitude() >= -180 && getRestaurantsRequest.getLongitude() <= 180) {
+      if(getRestaurantsRequest.getSearchFor()!=null && getRestaurantsRequest.getSearchFor()!=""){
+        getRestaurantsResponse = restaurantService.findRestaurantsBySearchQuery(getRestaurantsRequest, LocalTime.now());
+      }else{
+        getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
 
-       getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+      }
+
+     
 
       //  if(getRestaurantsResponse!=null && !getRestaurantsResponse.getRestaurants().isEmpty()){
       //   List<Restaurant>restaurants=getRestaurantsResponse.getRestaurants();
