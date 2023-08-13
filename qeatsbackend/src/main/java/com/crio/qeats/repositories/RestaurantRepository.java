@@ -19,6 +19,12 @@ public interface RestaurantRepository extends MongoRepository<RestaurantEntity, 
     List<RestaurantEntity> findByAttributesIgnoreCase(String searchString);
     List<RestaurantEntity> findByNameIgnoreCaseContainingOrderByNameAsc(String searchString);
     //List<RestaurantEntity> findBy
+    @Query("{'name':{$regex: '^?0$', $options: 'i'}}")
+    Optional<List<RestaurantEntity>> findRestaurantsByNameExact(String name);
+    
+    @Query("{'name': {$regex: '.*?0.*', $options: 'i'}}")
+    Optional<List<RestaurantEntity>> findRestaurantsByName(String searchString);
+
   
 }
 

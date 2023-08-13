@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -175,7 +176,7 @@ return restaurants;
       //  Query query=new Query(regexCriteria);
       //  query.with(Sort.by(Sort.Direction.ASC, searchString));
       // List<RestaurantEntity> restaurantEntityList=mongoTemplate.find(query, RestaurantEntity.class);
-     List<RestaurantEntity> restaurantEntityList=restaurantRepository.findByNameIgnoreCaseContainingOrderByNameAsc(searchString);
+     //List<RestaurantEntity> restaurantEntityList=restaurantRepository.findByNameIgnoreCaseContainingOrderByNameAsc(searchString);
       //System.out.println(restaurantEntities.size());
      
       //ModelMapper modelMapper=modelMapperProvider.get();
@@ -189,6 +190,9 @@ return restaurants;
 
       //  }
       // }
+      BasicQuery query = new BasicQuery("{name: {$regex: /" + searchString + "/i}}");
+      List<RestaurantEntity> restaurantEntityList = mongoTemplate
+          .find(query, RestaurantEntity.class, "restaurants");
       List<Restaurant>restaurantList=mapRestaurantEntityToRestaurant(restaurantEntityList, latitude, longitude, currentTime, servingRadiusInKms);
 
       return restaurantList;

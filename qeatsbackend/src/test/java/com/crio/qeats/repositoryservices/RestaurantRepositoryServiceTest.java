@@ -158,8 +158,8 @@ public class RestaurantRepositoryServiceTest {
     // doReturn(allRestaurants)
     //      .when(restaurantRepository).findByNameRegexIgnoreCase(any());
 
-         doReturn(allRestaurants)
-         .when(restaurantRepository).findByNameIgnoreCaseContainingOrderByNameAsc(any());
+         doReturn(Optional.of(allRestaurants))
+         .when(restaurantRepository).findRestaurantsByNameExact(any());
     String searchFor = "A2B";
     List<Restaurant> foundRestaurantsList = restaurantRepositoryService
         .findRestaurantsByName(20.8, 30.1, searchFor,
@@ -180,8 +180,8 @@ public class RestaurantRepositoryServiceTest {
     //     .when(restaurantRepository).findRestaurantsByNameExact(any());
     // doReturn(allRestaurants)
     //      .when(restaurantRepository).findByNameRegexIgnoreCase(any()); 
-         doReturn(allRestaurants)
-         .when(restaurantRepository).findByNameIgnoreCaseContainingOrderByNameAsc(any());
+         doReturn(Optional.of(allRestaurants))
+         .when(restaurantRepository).findRestaurantsByNameExact(any());
     String searchFor = "A2B";
     List<Restaurant> foundRestaurantsList = restaurantRepositoryService
         .findRestaurantsByName(20.8, 30.1, searchFor,
